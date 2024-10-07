@@ -3,18 +3,29 @@ import style from './style.module.css'
 
 export default function Cloud(){
 
-
-  const API= "https://api.weatherapi.com/v1/forecast.json?key=f3451e462d0a4efebff142535230204&q=mumbai&days=3"
+  // const API= (`https://api.weatherapi.com/v1/forecast.json?key=f3451e462d0a4efebff142535230204&q=${input}&days=3`)
 
   const [cloud, setCloud] = useState()
+  const [input, setInput] = useState("")
+
 
   const fetchdata=async()=>{
+    const API= `https://api.weatherapi.com/v1/forecast.json?key=f3451e462d0a4efebff142535230204&q=${input}&days=3`;
     const response = await fetch(API, {method: "get"});
+    // if (!response.ok) {
+    //   throw new Error('Network response was not ok');
+    // }
     const data = await response.json()
-    setCloud(data)
- 
-  }
+    setCloud(data);
+  };
+
+  
   console.log("descri....", cloud)
+
+  const handleOnChange= (e)=>{
+     setInput(e.target.value);
+    
+  }
 
   const {
   location, current, forecast
@@ -29,7 +40,7 @@ export default function Cloud(){
             </div>
           <div style={{display:"flex", marginBottom: '50px', justifyContent:"center", alignItems:"center", margin:"10px"}}>
               <input 
-              type="text" 
+               onChange={handleOnChange} value={input} type="text" 
               placeholder="Enter City Name" 
               className={style.input} />
               <button 
@@ -76,17 +87,22 @@ export default function Cloud(){
                 </div>
               </div> 
               <div className={style.forecastParent}>
-              {forecast?.forecastday?.map((item, index)=> (
+              {forecast?.forecastday?.map((item)=> (
                 <div className={style.forecastDiv}>
                   {/* {console.log("----what is in item --", index, item)} */}
                   <div>
                     <h4>{item.date}</h4> 
-                    <p>Sunrise: {item?.astro?.sunrise}</p>
-                    <p>Sunset: {item?.astro?.sunset}</p>
+                    <img
+                  src={item?.day?.condition?.icon}
+                  width="80px"
+                  alt="image icon"
+                  />
                   </div>
                   <div>
                     <p>Temperature: {item?.day?.avgtemp_c} 'C</p>
                     <p>Humidity: {item?.day?.avghumidity}</p>
+                    <p>Sunrise: {item?.astro?.sunrise}</p>
+                    <p>Sunset: {item?.astro?.sunset}</p>
                   </div>
                 </div>
               ))}

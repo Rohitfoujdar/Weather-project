@@ -1,82 +1,116 @@
 import React, { useState } from 'react';
+import style from './style.module.css';
 
-export default function WeatherComponent () {
-  const [state, setState] = useState({
-    weatherData: null,  // For storing fetched data
-    loading: false,     // For loading state
-    error: null,        // For error handling
-  });
+export default function Cloud() {
+  const [cloud, setCloud] = useState();
+  const [input, setInput] = useState('');
 
-  const [location, setLocation] = useState('');  // To store the user input location
-
-  const fetchWeatherData = async () => {
-    // setState({
-    //   ...state,
-    //   loading: true,   // Set loading to true when fetching starts
-    //   error: null,     // Reset error when new fetch starts
-    // });
-
+  const fetchdata = async () => {
+    const API = `https://api.weatherapi.com/v1/forecast.json?key=f3451e462d0a4efebff142535230204&q=${input}&days=3`;
     try {
-      const response = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=f3451e462d0a4efebff142535230204&q=${location}&days=5`
-      );
-      if (!response.ok) {
-        throw new Error('Failed to fetch weather data');
-      }
+      const response = await fetch(API, { method: 'GET' });
+      // if (!response.ok) {
+      //   throw new Error('Network response was not ok');
+      // }
       const data = await response.json();
-      setState({
-        weatherData: data,
-        loading: false,
-        error: null,
-      });
-    } catch (err) {
-      setState({
-        weatherData: null,
-        loading: false,
-        error: err.message,
-      });
+      setCloud(data);
+    } catch (error) {
+      console.error('Fetch error:', error);
+      // Optionally set error state to show to the user
     }
   };
 
-  const { weatherData, loading, error } = state;  // Destructure the state for easy access
+  console.log('Weather Data:', cloud);
+
+  const handleOnChange = (e) => {
+    setInput(e.target.value);
+  };
+
+  const { location, current, forecast } = cloud || {};
 
   return (
-    <div>
-      <h1>Weather Forecast</h1>
-
-      {/* Input for location and button to trigger API call */}
-      <input
-        type="text"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)} // Update location state on input change
-        placeholder="Enter location"
-      />
-      <button onClick={fetchWeatherData}>Get Weather</button>
-
-      {/* Conditional rendering for loading, error, and weather data */}
-      {loading && <div>Loading...</div>}
-      {error && <div>Error: {error}</div>}
-
-      {weatherData && (
-        <div>
-          <p>Location: {weatherData.location.name}, {weatherData.location.region}</p>
-          <p>Temperature: {weatherData.current.temp_c} °C</p>
-          <p>Condition: {weatherData.current.condition.text}</p>
-          <h2>Forecast:</h2>
-          <ul>
-            {weatherData.forecast.forecastday.map((day) => (
-              <li key={day.date}>
-                <p>Date: {day.date}</p>
-                <p>Max Temp: {day.day.maxtemp_c} °C</p>
-                <p>Min Temp: {day.day.mintemp_c} °C</p>
-                <p>Condition: {day.day.condition.text}</p>
-              </li>
-            ))}
-          </ul>
+    <div style={{ paddingTop: '30px' }}>
+      <div className='container' style={{
+        backgroundColor: "white",
+        paddingBottom: '40px',
+        height: "fit-content",
+        width: "70%",
+        marginLeft: "185px",
+        marginTop: "40px",
+        margin: "auto",
+        justifyContent: "center",
+        alignItems: "center",
+        fontFamily: "verdana",
+        color: "#0ea4a4",
+        borderRadius: "10px"
+      }}>
+        <div style={{ fontFamily: "Comic Sans MS" }}>
+          <h1 style={{ margin: 'auto', width: 'fit-content' }}>Weather Forecast</h1>
         </div>
-      )}
+        <div style={{ display: "flex", marginBottom: '50px', justifyContent: "center", alignItems: "center", margin: "10px" }}>
+          <input
+            onChange={handleOnChange}
+            value={input}
+            type="text"
+            placeholder="Enter City Name"
+            className={style.input}
+          />
+          <button
+            onClick={fetchdata}
+            style={{
+              marginLeft: "10px",
+              backgroundColor: "#15BCBC",
+              color: "white",
+              border: "none",
+              borderRadius: '5px',
+              padding: '6px 12px',
+              fontSize: '16px',
+              cursor: 'pointer'
+            }}
+          >
+            Find Weather
+          </button>
+        </div>
+        {/* Data show */}
+        {cloud && (
+          <div className={style.parentDiv}>
+            <div className={style.current}>
+              <div className={style.cityDiv}>
+                <img src={current?.condition?.icon} width="30px" alt="image icon" />
+                <h4>{current?.condition?.text}</h4>
+                <span>{location?.country},</span>
+                <span>{location?.region}</span> {/* Fixed typo here */}
+                <h4 className={style.city}>{location?.name}</h4>
+                <p>Latitude: {location?.lat}</p>
+              </div>
+              <div className={style.curWea}>
+                <h4>Today: {current?.last_updated}</h4>
+                <p>Wind Speed: {current?.wind_kph} km/h</p>
+                <p>Temperature: {current?.temp_c} 'C</p>
+                <p>Temperature: {current?.temp_f} 'F</p>
+                <p>Humidity: {current?.humidity}</p>
+              </div>
+            </div>
+            <div className={style.forecastParent}>
+              {forecast?.forecastday?.map((item, index) => (
+                <div key={index} className={style.forecastDiv}>
+                  <div>
+                    <h4>{item.date}</h4>
+                    <img src={item.day.condition.icon} width="80px" alt="image icon" />
+                  </div>
+                  <div>
+                    <p>Temperature: {item?.day?.avgtemp_c} 'C</p>
+                    <p>Humidity: {item?.day?.avghumidity}</p>
+                    <p>Sunrise: {item?.astro?.sunrise}</p>
+                    <p>Sunset: {item?.astro?.sunset}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
-};
+}
 
-// export default WeatherComponent;
