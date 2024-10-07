@@ -4,8 +4,15 @@ import style from './style.module.css';
 export default function Cloud() {
   const [cloud, setCloud] = useState();
   const [input, setInput] = useState('');
+  const [error, setError] = useState('');
+
 
   const fetchdata = async () => {
+    if (input.trim() === "") {  // Check if input is empty
+      setError("!fill the city name");
+      return;
+    }
+    setError(""); // Clear error when input is valid
     const API = `https://api.weatherapi.com/v1/forecast.json?key=f3451e462d0a4efebff142535230204&q=${input}&days=3`;
     try {
       const response = await fetch(API, { method: 'GET' });
@@ -24,6 +31,9 @@ export default function Cloud() {
 
   const handleOnChange = (e) => {
     setInput(e.target.value);
+   
+      setError(""); // Clear error on valid input
+    
   };
 
   const { location, current, forecast } = cloud || {};
@@ -48,6 +58,7 @@ export default function Cloud() {
           <h1 style={{ margin: 'auto', width: 'fit-content' }}>Weather Forecast</h1>
         </div>
         <div style={{ display: "flex", marginBottom: '50px', justifyContent: "center", alignItems: "center", margin: "10px" }}>
+          
           <input
             onChange={handleOnChange}
             value={input}
@@ -55,6 +66,7 @@ export default function Cloud() {
             placeholder="Enter City Name"
             className={style.input}
           />
+          {/* {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>} */}
           <button
             onClick={fetchdata}
             style={{
@@ -71,6 +83,8 @@ export default function Cloud() {
             Find Weather
           </button>
         </div>
+        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+
         {/* Data show */}
         {cloud && (
           <div className={style.parentDiv}>
