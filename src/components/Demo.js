@@ -9,7 +9,8 @@ export default function Cloud() {
 
   const fetchdata = async () => {
     if (input.trim() === "") {  // Check if input is empty
-      setError("!fill the city name");
+      setError("!plz fill the city name");
+      setCloud();
       return;
     }
     setError(""); // Clear error when input is valid
@@ -83,7 +84,7 @@ export default function Cloud() {
             Find Weather
           </button>
         </div>
-        {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+        {error && <p style={{ color: 'red', marginLeft:"215px", marginTop:"-10px"}}>{error}</p>}
 
         {/* Data show */}
         {cloud && (

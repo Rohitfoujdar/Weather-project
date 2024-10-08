@@ -7,9 +7,15 @@ export default function Cloud(){
 
   const [cloud, setCloud] = useState()
   const [input, setInput] = useState("")
-
+  const [error, setError] = useState('');
 
   const fetchdata=async()=>{
+    if (input.trim() === "") {  // Check if input is empty
+      setError("!plz fill the city name");
+      setCloud();
+      return;
+    }
+    setError("");
     const API= `https://api.weatherapi.com/v1/forecast.json?key=f3451e462d0a4efebff142535230204&q=${input}&days=3`;
     const response = await fetch(API, {method: "get"});
     // if (!response.ok) {
@@ -35,8 +41,11 @@ export default function Cloud(){
     return(
         <div style={{paddingTop: '30px'}}>
           <div className='container' style={{backgroundColor: "white",paddingBottom: '40px', height: "fit-content", width:"70%",marginLeft:"185px", marginTop:"40px", margin:"auto", justifyContent:"center", alignItems:"center", fontFamily:"verdana", color:"#0ea4a4", borderRadius:"10px"}}>
-            <div style={{ fontFamily:"Comic Sans MS"}} >
-              <h1 style={{margin: 'auto', width: 'fit-content'}}>Weather Forecast</h1>
+            <div style={{ fontFamily:"Comic Sans MS",}} >
+              <h1 style={{margin: 'auto', width: 'fit-content'}}>
+                <img src='https://cdn-icons-png.flaticon.com/128/648/648198.png' alt='weather icon' width="40px" marginLeft="auto"/>
+                Weather Forecast
+              </h1>
             </div>
           <div style={{display:"flex", marginBottom: '50px', justifyContent:"center", alignItems:"center", margin:"10px"}}>
               <input 
@@ -60,6 +69,7 @@ export default function Cloud(){
               </button>
           
             </div>
+            {error && <p style={{ color: 'red', marginLeft:"215px", marginTop:"-10px"}}>{error}</p>}
             {/* data show */}
             {cloud && 
             <div className={style.parentDiv}>
