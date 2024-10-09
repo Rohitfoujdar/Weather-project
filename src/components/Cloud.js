@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import style from './style.module.css'
+import style from './style.css'
 
 export default function Cloud(){
 
@@ -69,7 +69,7 @@ export default function Cloud(){
               </button>
           
             </div>
-            {error && <p style={{ color: 'red', marginLeft:"215px", marginTop:"-10px"}}>{error}</p>}
+            {error && <p style={{ color: 'red', marginLeft:"250px", marginTop:"-10px"}}>{error}</p>}
             {/* data show */}
             {cloud && 
             <div className={style.parentDiv}>
