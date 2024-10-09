@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import style from './style.css'
+import './Style.css'
 
 export default function Cloud(){
 
@@ -51,7 +51,7 @@ export default function Cloud(){
               <input 
                onChange={handleOnChange} value={input} type="text" 
               placeholder="Enter City Name" 
-              className={style.input} />
+              className="input" />
               <button 
               onClick={fetchdata} 
               style={{
@@ -69,13 +69,13 @@ export default function Cloud(){
               </button>
           
             </div>
-            {error && <p style={{ color: 'red', marginLeft:"250px", marginTop:"-10px"}}>{error}</p>}
+            {error && <p style={{ color: "red", marginLeft:"250px", marginTop:"-10px"}}>{error}</p>}
             {/* data show */}
             {cloud && 
-            <div className={style.parentDiv}>
-              <div className={style.current}>
+            <div className="parentDiv">
+              <div className="current">
                 {/* city details */}
-                <div className={style.cityDiv}>
+                <div className="cityDiv">
                   <img
                   src={current?.condition?.icon}
                   width="30px"
@@ -84,11 +84,11 @@ export default function Cloud(){
                   <h4>{current?.condition?.text}</h4>
                   <span> {location?.country},</span>
                   <sapn> {location?.region}</sapn>
-                  <h4 className={style.city}> {location?.name}</h4>
+                  <h4 className="city"> {location?.name}</h4>
                   <p>Lattitude: {location?.lat}</p>
                 </div>
                 {/* current weather */}
-                <div className={style.curWea}>
+                <div className="curWea">
                   <h4>Today: {current?.last_updated}</h4>
                   <p>Wind Speed: {current?.wind_kph} km/h</p>
                   <p>Temperature: {current?.temp_c} 'C</p>
@@ -96,9 +96,9 @@ export default function Cloud(){
                   <p>Humidity: {current?.humidity} </p>
                 </div>
               </div> 
-              <div className={style.forecastParent}>
+              <div className="forecastParent">
               {forecast?.forecastday?.map((item)=> (
-                <div className={style.forecastDiv}>
+                <div className="forecastDiv">
                   {/* {console.log("----what is in item --", index, item)} */}
                   <div>
                     <h4>{item.date}</h4> 
@@ -118,8 +118,7 @@ export default function Cloud(){
               ))}
               </div>
             </div>
-            }
-            
+            } 
           </div>
         </div>
     );
