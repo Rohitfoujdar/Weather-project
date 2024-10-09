@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import './Style.css'
+import './Cloud.css'
 
 export default function Cloud(){
 
